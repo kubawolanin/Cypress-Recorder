@@ -120,8 +120,17 @@ function handleFirstConnection(): void {
   );
   if (session.lastURL !== session.activePort.sender.url) {
     const visitBlock = codeGenerator.createVisit(session.activePort.sender.url);
+    // const app = session.activePort.sender.url;
+    const viewportBlock = codeGenerator.createViewport('desktop');
+    const visitIntegrationTestBlock = codeGenerator.createVisitIntegrationTests('desktop');
     session.lastURL = session.activePort.sender.url;
     model.pushBlock(visitBlock)
+      .then(block => chrome.runtime.sendMessage({ type: ControlAction.PUSH, payload: block }))
+      .catch(err => new Error(err));
+    model.pushBlock(viewportBlock)
+      .then(block => chrome.runtime.sendMessage({ type: ControlAction.PUSH, payload: block }))
+      .catch(err => new Error(err));
+    model.pushBlock(visitIntegrationTestBlock)
       .then(block => chrome.runtime.sendMessage({ type: ControlAction.PUSH, payload: block }))
       .catch(err => new Error(err));
   }

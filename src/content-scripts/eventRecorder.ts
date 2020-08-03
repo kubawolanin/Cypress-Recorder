@@ -15,14 +15,16 @@ let port: chrome.runtime.Port;
  * @returns {ParsedEvent}
  */
 function parseEvent(event: Event): ParsedEvent {
-  let selector: string = finder(event.target as Element);
   const supportedAttributes = [
     'data-cy',
     'data-test',
     'data-testid',
     'data-test-id',
   ];
-  supportedAttributes.forEach(attribute => {
+  let selector: string = finder(event.target as Element, {
+    attr: (name) => supportedAttributes.includes(name),
+  });
+  supportedAttributes.forEach((attribute) => {
     if ((event.target as Element).hasAttribute(attribute)) {
       selector = `[${attribute}=${(event.target as Element).getAttribute(attribute)}]`;
     }

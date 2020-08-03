@@ -72,4 +72,6 @@ export default {
   },
   createVisit: (url: string): string => `cy.visit('${url}');`,
   createUrl: (url: string): string => handleUrl(url),
+  createViewport: (app: string): string => `cy.viewport('${app}');`,
+  createVisitIntegrationTests: (app: string): string => `cy.visitIntegrationTests('${app}');`,
 };
